@@ -1,0 +1,76 @@
+﻿@page "/logs"
+
+
+@using Microsoft.Extensions.Logging
+
+@inject ILoggerFactory LoggerFactory;
+
+<h2>Logs</h2>
+<EditForm Model="this">
+    <InputSelect @bind-Value="LogLevel">
+        <option>Error</option>
+        <option>Warning</option>
+        <option>Information</option>
+        <option>Trace</option>
+        <option>Debug</option>
+    </InputSelect>
+</EditForm>
+
+<button @onclick="GenerateLogAsync">Generate 1 Log</button>
+<button @onclick="GenerateLog10Async">Generate 10 Logs</button>
+<button @onclick="GenerateLog100Async">Generate 100 Logs</button>
+
+<ul>
+    @foreach (var message in messages)
+    {
+        <li>a @message message</li>
+    }
+</ul>
+
+@code {
+
+
+    private ILogger logger;
+
+    LogLevel LogLevel { get; set; } = LogLevel.Information;
+
+    private List<LogLevel> messages = new List<LogLevel>();
+
+    protected override void OnInitialized()
+    {
+        logger = LoggerFactory.CreateLogger("LoggingPage");
+    }
+
+    async Task GenerateLogAsync()
+    {
+
+        Log();
+    }
+
+    async Task GenerateLog10Async()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            Log();
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(500);
+        }
+    }
+
+    async Task GenerateLog100Async()
+    {
+        for (var i = 0; i < 100; i++)
+        {
+            Log();
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(500);
+        }
+    }
+
+    void Log()
+    {
+        var msg = $"a {LogLevel} message";
+        logger.Log(LogLevel, msg);
+        messages.Add(LogLevel);
+    }
+}

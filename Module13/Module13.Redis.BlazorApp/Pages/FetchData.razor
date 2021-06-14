@@ -1,0 +1,80 @@
+﻿@page "/fetchdata"
+
+@using Module13.Redis.BlazorApp.Data
+@using Microsoft.Extensions.Caching.Distributed
+@using Microsoft.Extensions.Caching.StackExchangeRedis
+@using Module13.Redis.BlazorApp.Extensions
+
+@inject WeatherForecastService ForecastService
+@inject IDistributedCache RedisCache
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+<button class="btn btn-primary" @onclick="LoadForecast">Load Forecast</button>
+
+@if (forecasts is null && loadLocation == "")
+{
+    <p><em>Click the button to load the forecast</em></p>
+}
+else if (forecasts is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="h3 @isCacheData">@loadLocation</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+
+    private string loadLocation = "";
+    private string isCacheData = "";
+
+    private async Task LoadForecast()
+    {
+        forecasts = null;
+        loadLocation = null;
+
+        string recordKey = "WeatherForecast";
+
+        forecasts = await RedisCache.GetRecordAsync<WeatherForecast[]>(recordKey);
+        if (forecasts is null)
+        {
+            forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+            loadLocation = $"Loaded from API at { DateTime.Now }";
+            isCacheData = "";
+
+            await RedisCache.SetRecordAsync(recordKey, forecasts, TimeSpan.FromSeconds(10));
+        }
+        else
+        {
+            loadLocation = $"Loaded from the cache at {DateTime.Now}";
+            isCacheData = "text-danger";
+        }
+    }
+
+}

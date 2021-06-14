@@ -1,0 +1,81 @@
+﻿@page "/config"
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<h2>Configurations</h2>
+
+@if (Error != null)
+{
+    <p>There was an error retrieving configuration data.</p>
+}
+else if (Providers != null)
+{
+    @foreach (var provider in Providers)
+    {
+        <h3>@provider.ToString().Replace("JsonConfigurationProvider for", "")</h3>
+        <ul>
+            @foreach (var pair in GetConfigItemsFromProvider(provider))
+            {
+                <li><em>"@pair.Key"</em> : "@pair.Value"</li>
+            }
+        </ul>
+    }
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+@code {
+    private string Error { get; set; }
+    private List<IConfigurationProvider> Providers { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Configuration is ConfigurationRoot root)
+        {
+            Providers = root.Providers.ToList();
+        }
+        else
+        {
+            Error = "Could not convert IConfiguration to ConfigurationRoot";
+        }
+
+        return;
+    }
+
+    IEnumerable<(string Key, string Value)> GetConfigItemsFromProvider(IConfigurationProvider prov)
+    {
+        var keys = GetFullKeyNames(prov, null, new HashSet<string>()).OrderBy(p => p);
+        foreach (var key in keys)
+        {
+            if (prov.TryGet(key, out var value))
+            {
+                yield return (key, value);
+            }
+        }
+    }
+
+    static HashSet<string> GetFullKeyNames(IConfigurationProvider provider, string rootKey, HashSet<string> initialKeys)
+    {
+        foreach (var key in provider.GetChildKeys(Enumerable.Empty<string>(), rootKey))
+        {
+            string surrogateKey = key;
+            if (rootKey != null)
+            {
+                surrogateKey = rootKey + ":" + key;
+            }
+
+            GetFullKeyNames(provider, surrogateKey, initialKeys);
+
+            if (!initialKeys.Any(k => k.StartsWith(surrogateKey)))
+            {
+                initialKeys.Add(surrogateKey);
+            }
+        }
+
+        return initialKeys;
+    }
+}

@@ -1,0 +1,111 @@
+﻿<Window x:Class="Module10.EventHubs.WPFApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Module10.EventHubs.WPFApp"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel>
+            <Grid
+                Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0" Grid.Column="0"
+                    Text="Event Hub Namespace connection string:"/>
+                <TextBox
+                    Grid.Row="0" Grid.Column="1"
+                    Text="{Binding EventHubConnectionString}"/>
+
+                <TextBlock
+                    Grid.Row="1" Grid.Column="0"
+                    Text="Event Hub Name"/>
+                <TextBox
+                    Grid.Row="1" Grid.Column="1"
+                    Text="{Binding EventHubName}"/>
+
+                <TextBlock
+                    Grid.Row="2" Grid.Column="0"
+                    Text="Storage connection string"/>
+                <TextBox
+                    Grid.Row="2" Grid.Column="1"
+                    Text="{Binding StorageConnectionString}"/>
+
+                <TextBlock
+                    Grid.Row="3" Grid.Column="0"
+                    Text="Storage container"/>
+                <TextBox
+                    Grid.Row="3" Grid.Column="1"
+                    Text="{Binding StorageContainerName}"/>
+            </Grid>
+
+
+            <Button
+                Margin="10"
+                HorizontalAlignment="Left"
+                x:Name="ConnectButton"
+                Click="ConnectButton_OnClick"
+                Content="Connect"/>
+
+            <Separator Margin="10"/>
+        </StackPanel>
+
+        <Grid
+            Grid.Row="1">
+
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0"
+                       Margin="10">
+                <TextBlock 
+                    DockPanel.Dock="Top"
+                    Text="{Binding Events.Count, StringFormat={}Events (Count: {0})}"/>
+                <ListView 
+                    MinHeight="100"
+                    x:Name="eventList"
+                    DisplayMemberPath="Timestamp"
+                    ItemsSource="{Binding Events}"/>
+            </DockPanel>
+
+            <StackPanel 
+                Margin="10"
+                Grid.Column="1"
+                d:DataContext="{d:DesignInstance local:EventItem}"
+                DataContext="{Binding SelectedItem, ElementName=eventList}">
+                <TextBlock Text="Event detail" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Timestamp}"/>
+
+                <TextBlock Text="Data:" Margin="0 10 0 0 "/>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Text="{Binding Data}"/>
+
+                </StackPanel>
+
+        </Grid>
+    </Grid>
+</Window>

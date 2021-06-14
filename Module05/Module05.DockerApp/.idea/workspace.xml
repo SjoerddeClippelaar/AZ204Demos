@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3b23faba-cd43-46a4-98b7-d83448720b87" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../AZ204Demos.sln" beforeDir="false" afterPath="$PROJECT_DIR$/../../AZ204Demos.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Module12/Module12.WebAPI1/Module12.WebAPI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../Module12/Module12.WebAPI1/Module12.WebAPI.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Module12/Module12.WebAPI1/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Module12/Module12.WebAPI1/Startup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Module12/module12.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../../Module12/module12.sh" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1pwADwViHhmjEkNnvfUraHH08qu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b23faba-cd43-46a4-98b7-d83448720b87" name="Default Changelist" comment="" />
+      <created>1616083663299</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616083663299</updated>
+    </task>
+    <servers />
+  </component>
+</project>

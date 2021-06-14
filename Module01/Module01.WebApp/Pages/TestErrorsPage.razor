@@ -1,0 +1,35 @@
+﻿@page "/exceptions"
+
+@using Microsoft.Extensions.Logging;
+@inject ILoggerFactory LoggerFactory;
+
+<h2>Exceptions testing</h2>
+
+<button @onclick="GenerateCaughtErrorAsync">Generate caught Error</button>
+<button @onclick="GenerateUncaughtErrorAsync">Generate uncaught Error</button>
+
+@code {
+    private ILogger logger;
+
+    protected override void OnInitialized()
+    {
+        logger = LoggerFactory.CreateLogger("LoggingPage");
+    }
+
+    async Task GenerateCaughtErrorAsync()
+    {
+        try
+        {
+            throw new InvalidOperationException("User action triggered an exception!");
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Caught an exception: {e.Message}");
+        }
+    }
+
+    async Task GenerateUncaughtErrorAsync()
+    {
+        throw new InvalidOperationException("User action triggered an exception!");
+    }
+}

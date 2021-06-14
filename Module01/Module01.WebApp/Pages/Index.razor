@@ -1,0 +1,31 @@
+﻿@page "/"
+@using Microsoft.Extensions.Configuration
+
+@inject IConfiguration Configuration;
+
+<h1>AZ204 Module 1 Demo App</h1>
+
+
+@if (ServerName != null)
+{
+    <p>Server name: @ServerName</p>
+}
+else
+{
+    <p>No server name found in configuration.</p>
+}
+
+
+
+@code
+{
+    public string ServerName { get; private set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        ServerName = Configuration["ServerName"];
+    }
+}
+

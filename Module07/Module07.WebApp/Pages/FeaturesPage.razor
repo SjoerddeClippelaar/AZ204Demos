@@ -1,0 +1,58 @@
+﻿@page "/features"
+
+@using Microsoft.Extensions.Configuration;
+@using Microsoft.FeatureManagement;
+@using Newtonsoft.Json;
+
+@inject IFeatureManager FeatureManager;
+@inject IConfiguration Configuration;
+
+<h2>App Configuration</h2>
+
+@if (Loaded)
+{
+<h3>Key Value Pairs:</h3>
+    <p>Box Background: @BoxBackground</p>
+    <p>Box Size: @BoxSize</p>
+
+    <div style="width:@(BoxSize)px;height:@(BoxSize)px; background-color: @BoxBackground; margin:10px"></div>
+
+<h3>Features</h3>
+<ul>
+    @foreach (var (name, value) in Features)
+    {
+    <li>@value - @name</li>
+    }
+</ul>
+}
+else
+{
+<p>Loading...</p>
+}
+
+@code {
+
+    public bool Loaded;
+    public List<(string, bool)> Features = new List<(string, bool)>();
+
+    public string BoxBackground { get; set; }
+    public string BoxSize { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await foreach (var name in FeatureManager.GetFeatureNamesAsync())
+        {
+            var dname = "FeatureManagement:" + name;
+            var value = await FeatureManager.IsEnabledAsync(name);
+
+            Features.Add((name, value));
+        }
+
+        BoxBackground = Configuration["testAppBackgroundColor"];
+        BoxSize = Configuration["testAppBoxSize"];
+
+        Loaded = true;
+        return;
+    }
+}
